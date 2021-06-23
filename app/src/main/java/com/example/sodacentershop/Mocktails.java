@@ -1,5 +1,6 @@
 package com.example.sodacentershop;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,12 +11,27 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Mocktails extends AppCompatActivity {
 
@@ -23,6 +39,30 @@ public class Mocktails extends AppCompatActivity {
     AlertDialog.Builder builder;
     String TAG ="main";
     final int UPI_PAYMENT = 0;
+
+
+    FirebaseFirestore firebaseFirestore;
+
+    String mojito_soda = "MOJITO";
+    String mojito_price = "60";
+
+    String black_current_soda = "Black Current";
+    String black_current_price = "70";
+
+    String electric_shock_soda = "Electric Shock";
+    String electric_shock_price = "80";
+
+    String blue_lagoon_soda = "Blue Lagoon";
+    String blue_lagoon_price = "90";
+
+    String raspberry_mint_soda = "Raspberry Mint";
+    String raspberry_mint_price = "100";
+
+    String caranberry_lime_soda = "Caranberry Lime";
+    String caranberry_lime_price = "120";
+
+    String selected_soda = "";
+    String selected_price = "";
 
 
     @Override
@@ -41,42 +81,54 @@ public class Mocktails extends AppCompatActivity {
         mojito.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmation("MOJITO", "60");
+                selected_soda = mojito_soda;
+                selected_price = mojito_price;
+                confirmation(selected_soda, selected_price);
             }
         });
 
         blackCurrent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmation("Black Current", "70");
+                selected_soda = black_current_soda;
+                selected_price = black_current_price;
+                confirmation(selected_soda, selected_price);
             }
         });
 
         ElectricShock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmation("Electric Shock" , "80");
+                selected_soda = electric_shock_soda;
+                selected_price = electric_shock_price;
+                confirmation(selected_soda, selected_price);
             }
         });
 
         blueLagoon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmation("Blue Lagoon", "90");
+                selected_soda = blue_lagoon_soda;
+                selected_price = blue_lagoon_price;
+                confirmation(selected_soda, selected_price);
             }
         });
 
         RasberryMint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmation("Raspberry Mint", "100");
+                selected_soda = raspberry_mint_soda;
+                selected_price = raspberry_mint_price;
+                confirmation(selected_soda, selected_price);
             }
         });
 
         caranberryLime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmation("Cranberry Lime", "120");
+                selected_soda = caranberry_lime_soda;
+                selected_price = caranberry_lime_price;
+                confirmation(selected_soda, selected_price);
             }
         });
 
@@ -196,12 +248,29 @@ public class Mocktails extends AppCompatActivity {
             if (status.equals("success")) {
                 //Code to handle successful transaction here.
 
+                Calendar calendar = Calendar.getInstance();
+                SimpleDateFormat mdformat = new SimpleDateFormat("HH:mm:ss");
+                String strDate = mdformat.format(calendar.getTime());
 
+                String date = DateFormat.format("dd/MM/yyyy", calendar).toString();
 
+                firebaseFirestore = FirebaseFirestore.getInstance();
+                DocumentReference df = firebaseFirestore.collection("SodaOrders").document();
+
+                Map<String, Object> user = new HashMap<>();
+                user.put("category", selected_soda);
+                user.put("price", selected_price);
+                user.put("time", strDate);
+                user.put("date", date);
+
+                df.set(user);
 
                 Toast.makeText(Mocktails.this, "Transaction successful.", Toast.LENGTH_SHORT).show();
             }
             else if("Payment cancelled by user.".equals(paymentCancel)) {
+
+
+
                 Toast.makeText(Mocktails.this, "Payment cancelled by user.", Toast.LENGTH_SHORT).show();
 
             }

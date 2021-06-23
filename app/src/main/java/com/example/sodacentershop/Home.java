@@ -10,12 +10,20 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Home extends AppCompatActivity {
 
@@ -23,7 +31,12 @@ public class Home extends AppCompatActivity {
 
     AlertDialog.Builder builder;
     String TAG ="main";
-    final int UPI_PAYMENT = 10;
+    final int UPI_PAYMENT = 0;
+
+    String selected_soda = "";
+    String selected_price = "";
+
+    FirebaseFirestore firebaseFirestore;
 
 
     @Override
@@ -61,48 +74,62 @@ public class Home extends AppCompatActivity {
         dk1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmation("COLA", "20");
+                selected_soda = "COLA";
+                selected_price = "20";
+                confirmation(selected_soda, selected_price);
             }
         });
 
         dk2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmation("JIRA", "20");
+                selected_soda = "JIRA";
+                selected_price = "20";
+                confirmation(selected_soda, selected_price);
             }
         });
 
         dk3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmation("MINT", "20");
+                selected_soda = "MINT";
+                selected_price = "20";
+                confirmation(selected_soda, selected_price);
             }
         });
 
         dk4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmation("PUDINA", "20");
+                selected_soda = "PUDINA";
+                selected_price = "20";
+                confirmation(selected_soda, selected_price);
             }
         });
 
         dk5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmation("FRUIT BEER", "20");
+                selected_soda = "FRUIT BEER";
+                selected_price = "20";
+                confirmation(selected_soda, selected_price);
             }
         });
         dk6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmation("SPRITE", "20");
+                selected_soda = "SPRITE";
+                selected_price = "20";
+                confirmation(selected_soda, selected_price);
             }
         });
 
         dk7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmation("APPY FIZZ", "20");
+                selected_soda = "APPY FIZZ";
+                selected_price = "20";
+                confirmation(selected_soda, selected_price);
             }
         });
 
@@ -221,19 +248,36 @@ public class Home extends AppCompatActivity {
             }
             if (status.equals("success")) {
                 //Code to handle successful transaction here.
+
+                Calendar calendar = Calendar.getInstance();
+                SimpleDateFormat mdformat = new SimpleDateFormat("HH:mm:ss");
+                String strDate = mdformat.format(calendar.getTime());
+
+                String date = DateFormat.format("dd/MM/yyyy", calendar).toString();
+
+                firebaseFirestore = FirebaseFirestore.getInstance();
+                DocumentReference df = firebaseFirestore.collection("SodaOrders").document();
+
+                Map<String, Object> user = new HashMap<>();
+                user.put("category", selected_soda);
+                user.put("price", selected_price);
+                user.put("time", strDate);
+                user.put("date", date);
+
+                df.set(user);
+
+
                 Toast.makeText(Home.this, "Transaction successful.", Toast.LENGTH_SHORT).show();
-                Log.e("UPI", "payment successfull: "+approvalRefNo);
             }
             else if("Payment cancelled by user.".equals(paymentCancel)) {
+
+
                 Toast.makeText(Home.this, "Payment cancelled by user.", Toast.LENGTH_SHORT).show();
-                Log.e("UPI", "Cancelled by user: "+approvalRefNo);
             }
             else {
                 Toast.makeText(Home.this, "Transaction failed.Please try again", Toast.LENGTH_SHORT).show();
-                Log.e("UPI", "failed payment: "+approvalRefNo);
             }
         } else {
-            Log.e("UPI", "Internet issue: ");
             Toast.makeText(Home.this, "Internet connection is not available. Please check and try again", Toast.LENGTH_SHORT).show();
         }
     }
@@ -249,9 +293,6 @@ public class Home extends AppCompatActivity {
         }
         return false;
     }
-
-
-
 
 
 }
