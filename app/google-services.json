@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "936230433133",
+    "project_id": "sodacentershop-95972",
+    "storage_bucket": "sodacentershop-95972.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:936230433133:android:f60da6a1f2f807d67a2a64",
+        "android_client_info": {
+          "package_name": "com.example.sodacentershop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "936230433133-oeqtodksv7jto1ueqi0cpai5860gf8t7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBeAGvH1uNxJX50Y9EcJJLUQjFb2x3k6Ag"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "936230433133-oeqtodksv7jto1ueqi0cpai5860gf8t7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
