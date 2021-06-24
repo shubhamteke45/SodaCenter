@@ -165,8 +165,8 @@ public class Home extends AppCompatActivity {
 
     void payUsingUpi(  String note, String amount) {
         Uri uri = Uri.parse("upi://pay").buildUpon()
-                .appendQueryParameter("pa", "shubham.teke30@okhdfcbank")
-                .appendQueryParameter("pn", "Shubham Teke")
+                .appendQueryParameter("pa", "skbendale02@oksbi")
+                .appendQueryParameter("pn", "Sahil Bendale")
                 //.appendQueryParameter("mc", "")
                 //.appendQueryParameter("tid", "02125412")
                 //.appendQueryParameter("tr", "25584584")
